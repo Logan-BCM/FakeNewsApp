@@ -1,0 +1,31 @@
+<!-- signup.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles1.css') }}"> <!-- Include the CSS file -->
+</head>
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Sign Up</h2>
+            <form action="/signup" method="POST">
+                <input type="name" name="name" placeholder="Name" required><br>
+                <input type="email" name="email" placeholder="Email Address" required><br>
+                <input type="password" name="password" placeholder="Password" required><br>
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+        <div class="image-container">
+            <img src="{{ url_for('static', filename='images/logo_pesacheck.png') }}" alt="Sign Up Image">
+            <p>
+               Pesacheck is dedicated to combating fake news by
+               providing a eliable factchecking service. Our team of
+               experts verifies information to ensure accuracy and
+               promote trustworthy news sources.</p>
+        </div>
+    </div>
+</body>
+</html>

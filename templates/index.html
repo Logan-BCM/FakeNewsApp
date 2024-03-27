@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pesa-Check | Organization</title>
+  <link rel="stylesheet" href="static\css\style.css">
+  <!-- Google Icons Link -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0">
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <a href="#" class="logo">
+        <img src="images/logo pesacheck.png" alt="PesaCheck Logo">
+      </a>
+      <ul class="menu-links">
+        <li><a href="#">How it Works</a></li>
+        <li><a href="#">Learn More</a></li>
+        <li class="language-item">
+          <a href="#">
+            <span class="material-symbols-outlined">language</span>
+            English
+          </a>
+        </li>
+        <li><a href="#">About Us</a></li>
+        <li><a href="#">Sign Out</a></li>
+        <li class="join-btn"><a href="#">Join Us</a></li>
+        <span id="close-menu-btn" class="material-symbols-outlined">close</span>
+      </ul>
+      <span id="hamburger-btn" class="material-symbols-outlined">menu</span>
+    </nav>
+  </header>
+
+  <section class="hero-section">
+    <div class="content">
+      <h1>Combating Fake News with PesaCheck AI</h1>
+      <form action="/" class="search-form" method="POST">
+        <input type="text" placeholder="Enter the URL for the News Article..." required>
+        <button class="material-symbols-outlined" type="submit">search</button>
+      </form>
+      <div class="popular-tags">
+        <ul class="tags">
+          <li><a href="#">Fighting Misinformation</a></li>
+          <li><a href="#">Trustworthy</a></li>
+          <li><a href="#">Empowering Truth</a></li>
+          <li><a href="#">Debunk Misleading Claims</a></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="how-it-works">
+    <h2>How it Works</h2>
+    <div class="cards">
+      <div class="card">
+        <h3>Step 1</h3>
+        <p>Submit the URL of the news article you want to verify.</p>
+      </div>
+      <div class="card">
+        <h3>Step 2</h3>
+        <p>Our AI system analyzes the content and checks for credibility.</p>
+      </div>
+      <div class="card">
+        <h3>Step 3</h3>
+        <p>We provide you with the results, highlighting any misinformation or misleading claims.</p>
+      </div>
+    </div>
+  </section>
+  
+  <script>
+    const header = document.querySelector("header");
+    const hamburgerBtn = document.querySelector("#hamburger-btn");
+    const closeMenuBtn = document.querySelector("#close-menu-btn");
+
+    // Toggle mobile menu on hamburger button click
+    hamburgerBtn.addEventListener("click", () => header.classList.toggle("show-mobile-menu"));
+
+    // Close mobile menu on close button click
+    closeMenuBtn.addEventListener("click", () => hamburgerBtn.click());
+  </script>
+</body>
+</html>
