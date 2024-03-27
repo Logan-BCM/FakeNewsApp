@@ -36,9 +36,10 @@
     <div class="content">
       <h1>Combating Fake News with PesaCheck AI</h1>
       <form action="/" class="search-form" method="POST">
-        <input type="text" placeholder="Enter the URL for the News Article..." required>
+        <input type="text" name="text" placeholder="Enter the URL for the News Article..." required>
         <button class="material-symbols-outlined" type="submit">search</button>
       </form>
+      {{value}}
       <div class="popular-tags">
         <ul class="tags">
           <li><a href="#">Fighting Misinformation</a></li>
