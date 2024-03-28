@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
+from detector import predict
 
 app = Flask(__name__)
 app.secret_key = 'fakenews123'
@@ -13,17 +14,20 @@ mysql = MySQL(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    url = None  # Initialize URL variable
+
+    value = ""
     if request.method == 'POST':
+
         url = request.form.get('url')  # Retrieve URL from form data
-        # return url
-        print("------", url, request.args)
-        return render_template('signup.html')
+        # value = True
 
-    return render_template('index.html')
 
-# def index():
-#     return render_template('login.html')
+        # a = '''“We have over 100,000 children, which we’ve never had before, in serious condition, and many on ventilators” due to the coronavirus.'''
+                        # value = predict(a)
+        value = predict(url)
+
+    return render_template('index.html', value=value)
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -36,9 +40,9 @@ def signup():
             cur.execute("INSERT INTO users (name, email, password) VALUES (%s, %s, %s)", (name, email, password))
             mysql.connection.commit()
             cur.close()
-            #return 'Sign-up successful!'
             return redirect(url_for('index'))
     return render_template('signup.html')
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -49,12 +53,13 @@ def login():
         cur.execute("SELECT * FROM users WHERE email = %s AND password = %s", (email, password))
         user = cur.fetchone()
         cur.close()
+
         if user:
-            #return 'Login successful!'
             return redirect(url_for('index'))
         else:
             return 'Invalid email or password'
     return render_template('login.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
