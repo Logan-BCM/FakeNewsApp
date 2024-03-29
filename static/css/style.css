@@ -29,6 +29,10 @@ header {
   max-height: 40px;
 }
 
+.logo-text{
+  display: flex;
+}
+
 .menu-links {
   display: flex;
   list-style: none;
