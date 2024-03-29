@@ -37,7 +37,7 @@
         <input type="text" name="url" placeholder="Enter the URL for the News Article..." required>
         <button class="material-symbols-outlined" type="submit">search</button>
       </form>
-      {{value}}
+      
       <div class="popular-tags">
         <ul class="tags">
           <li><a href="#">Fighting Misinformation</a></li>
@@ -46,6 +46,13 @@
           <li><a href="#">Debunk Misleading Claims</a></li>
         </ul>
       </div>
+
+      <div class="tag-label">
+        <div class="label-tag" id="valueContainer">
+          {{value}}
+        </div>
+
+      </div>    
     </div>
   </section>
 
@@ -85,6 +92,7 @@
         e.preventDefault();
         const targetId = scrollLink.getAttribute('href').substring(1);
         const targetSection = document.getElementById(targetId);
+        
         window.scrollTo({
           top: targetSection.offsetTop,
           behavior: 'smooth'

@@ -84,6 +84,7 @@ header {
 }
 
 .search-form {
+  display: flex;
   margin-bottom: 40px;
 }
 
@@ -110,7 +111,7 @@ header {
 }
 
 .popular-tags {
-  font-size: 18px;
+  font-size: 16px;
   margin-top: 20px;
 }
 
@@ -136,6 +137,27 @@ header {
 .popular-tags .tags a:hover {
   background-color: #ffc107;
   color: #343a40;
+}
+
+.tag-label{
+  display: flex;
+  justify-content: center;
+  margin-top: 3%;
+}
+
+.label-tag{
+  font-weight: 800;
+  font-size: 26px;
+  margin-top: 20px;
+  color: #2c2204;
+  text-decoration: none;
+  background-color: #ffc107;
+  padding: 8px 15px;
+  border-radius: 20px;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  width: 40%;
+  height: 40%;
+  
 }
 
 /* Mobile menu styles */
