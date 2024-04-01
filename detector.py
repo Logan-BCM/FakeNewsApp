@@ -24,7 +24,6 @@ get_path_for = lambda x: os.path.join(BASE_DIRR, f"assets/{x}")
 
 voc_size = 5000
 sent_length = 20
-embedding_vector_features = 40
 
 def save_pickle(filename, data):
     pickle_path = get_path_for(filename)
