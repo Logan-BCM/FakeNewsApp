@@ -27,10 +27,19 @@ def index():
 
 
             if url_validator(url):
-
                 content = fetch_url_content(url)
                 if content:
+                    cur = mysql.connection.cursor()
+                    cur.execute("INSERT INTO article_data (url, content, user_id) VALUES (%s, %s, %s)", (url, content, session["id"]))
+                    mysql.connection.commit()
+                    article_id = cur.lastrowid
+
                     value = predict(content)
+
+                    cur.execute("INSERT INTO classification_results (article_id, classification_result) VALUES (%s, %s)", (article_id, 1 if value else 0))
+                    mysql.connection.commit()
+                    cur.close()
+
                 else:
                     value = "Error!!"
                     explanation = ""
