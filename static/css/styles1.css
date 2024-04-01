@@ -82,3 +82,7 @@ body {
     padding: 20px;
     text-align: center;
 }
+
+.error {
+    color: red;
+}
