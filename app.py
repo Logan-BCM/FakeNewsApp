@@ -60,13 +60,20 @@ def signup():
             cur.execute("SELECT * FROM users WHERE email = %s", (email,))
             user = cur.fetchone()
 
-            if not user:
+            if user:
+                error = "Email already taken"
+            else:
                 cur.execute("INSERT INTO users (name, email, password) VALUES (%s, %s, %s)", (name, email, hashed_password))
                 mysql.connection.commit()
                 cur.close()
+
+                user_id = cur.lastrowid
+                session["id"] = user_id
+                session["name"] = name
+                session["email"] = email
+
                 return redirect(url_for('index'))
-            else:
-                error = "Email already taken"
+                
     return render_template('signup.html', error=error)
 
 
@@ -81,13 +88,14 @@ def login():
         hashed_password = sha256_hash(password)
 
         cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM users WHERE email = %s AND password = %s", (email, hashed_password))
+        cur.execute("SELECT user_id, name, email FROM users WHERE email = %s AND password = %s", (email, hashed_password))
         user = cur.fetchone()
 
         cur.close()
         
         if user:
-            name, email, _ = user
+            user_id, name, email = user
+            session["id"] = user_id
             session["name"] = name
             session["email"] = email
 
@@ -96,11 +104,14 @@ def login():
             error = 'Invalid email or password'
     return render_template('login.html', error=error)
 
+
 @app.route('/logout')
 def logout():
+    session.pop('id', None)
     session.pop('name', None)
     session.pop('email', None)
     return redirect(url_for('login'))
+
 
 if __name__ == '__main__':
     app.run(debug=True)
