@@ -2,13 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for, session
 from flask_mysqldb import MySQL
 from detector import predict
 from utils import fetch_from_url
-from flask_bcrypt import Bcrypt
-
-
 
 app = Flask(__name__)
 app.secret_key = 'fakenews123'
-bycrpt = Bcrypt(app)
 
 #MySQL Configuration
 app.config['MYSQL_HOST'] = 'localhost'
@@ -19,7 +15,6 @@ mysql = MySQL(app)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-
     value = ""
     if request.method == 'POST':
         url = request.form.get('url')  # Retrieve URL from form data
@@ -36,7 +31,7 @@ def signup():
             name = request.form['name']
             email = request.form['email']
             password = request.form['password']
-            hashed_password= bycrpt.generate_password_hash(password).decode('utf-8')
+            hashed_password = hash(password)
         
             cur = mysql.connection.cursor()
             cur.execute("INSERT INTO users (name, email, password) VALUES (%s, %s, %s)", (name, email, hashed_password))
@@ -51,11 +46,11 @@ def login():
     if request.method == 'POST':
         email = request.form['email']
         password = request.form['password']
-            
+        hashed_password = hash(password)
+
         cur = mysql.connection.cursor()
-        cur.execute("SELECT * FROM users WHERE email = %s AND password = %s", (email, password))
+        cur.execute("SELECT * FROM users WHERE email = %s AND password = %s", (email, hashed_password))
         user = cur.fetchone()
-        user = True
         cur.close()
         
         if user:
@@ -65,5 +60,5 @@ def login():
     return render_template('login.html')
 
 
-if __name__ == '_main_':
+if __name__ == '__main__':
     app.run(debug=True)
