@@ -1,4 +1,5 @@
 import hashlib
+from urllib.parse import urlparse
 
 from bs4 import BeautifulSoup
 import requests
@@ -12,6 +13,15 @@ def sha256_hash(data):
 	sha256.update(data.encode("utf-8"))
 	hashed_data = sha256.hexdigest()
 	return hashed_data
+
+
+def url_validator(url):
+	try:
+		result = urlparse(url)
+		return all([result.scheme, result.netloc, result.path])
+	except:
+		return False
+
 
 def fetch_url_content(url):
     try:
