@@ -24,7 +24,7 @@
             
           </a>
         </li>
-        <li><a href="/login">Sign Out</a></li>
+        <li><a href="/logout">Sign Out</a></li>
         <li class="join-btn"><a href=" ">Join Us</a></li>
         <span id="close-menu-btn" class="material-symbols-outlined">close</span>
       </ul>
@@ -35,8 +35,8 @@
   <section id="hero" class="hero-section">
     <div class="content">
       <h1>Combating Fake News with PesaCheck AI</h1>
-      <form action="/" class="search-form" method="POST">
-        <input type="text" name="url" placeholder="Enter the URL for the News Article..." required>
+      <form action="/" class="search-form" method="POST" onsubmit="loading()">
+        <input type="text" name="url" placeholder="Enter the URL for the News Article..." required>=
         <button class="material-symbols-outlined" type="submit">search</button>
       </form>
       
@@ -48,6 +48,8 @@
           <li><a href="#">Debunk Misleading Claims</a></li>
         </ul>
       </div>
+
+      {{loading}}
 
       <div class="tag-label">
         <div class="label-tag" id="valueContainer">
@@ -102,6 +104,12 @@
         });
       });
     });
+
+
+    function loading() {
+      const valueContainer = document.querySelector("#valueContainer");
+      valueContainer.innerHTML = "loading..."
+    }
   </script>
 </body>
 </html>
