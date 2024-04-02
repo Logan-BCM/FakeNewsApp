@@ -24,20 +24,21 @@ def url_validator(url):
 
 
 def fetch_url_content(url):
-    try:
-        # Fetch webpage content
-        response = requests.get(url)
-        if response.status_code == 200:
-            # Parse HTML content
-            soup = BeautifulSoup(response.content, 'html.parser')
-            # Extract text from HTML
-            text = soup.get_text()
-            # Remove extra whitespaces and newlines
-            text = ' '.join(text.split())
-            return text
-        else:
-            print("Failed to fetch URL:", response.status_code)
-            return None
-    except Exception as e:
-        print("Error fetching URL:", e)
-        return None
+	url = url.strip()
+	try:
+		# Fetch webpage content
+		response = requests.get(url)
+		if response.status_code == 200:
+			# Parse HTML content
+			soup = BeautifulSoup(response.content, 'html.parser')
+			# Extract text from HTML
+			text = soup.get_text()
+			# Remove extra whitespaces and newlines
+			text = ' '.join(text.split())
+			return text
+		else:
+			print("Failed to fetch URL:", response.status_code)
+			return None
+	except Exception as e:
+		print("Error fetching URL:", e)
+		return None

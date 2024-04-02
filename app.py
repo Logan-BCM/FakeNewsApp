@@ -1,7 +1,19 @@
-from flask import Flask, render_template, request, redirect, url_for, session
-from flask_mysqldb import MySQL
 from detector import predict
-from utils import fetch_url_content, sha256_hash, url_validator
+from utils import (
+	fetch_url_content,
+	sha256_hash,
+	url_validator
+)
+
+from flask import (
+	Flask,
+	render_template,
+	request,
+	redirect,
+	session,
+	url_for
+)
+from flask_mysqldb import MySQL
 
 app = Flask(__name__)
 app.secret_key = "fakenews123"
@@ -16,45 +28,49 @@ mysql = MySQL(app)
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-
 	explanation = ""
 	value = ""
-	loading = ""
 
-	if session:    
-		if request.method == "POST":
-			url = request.form.get("url")  # Retrieve URL from form data
-
-
-			if url_validator(url):
-				content = fetch_url_content(url)
-				if content:
-					cur = mysql.connection.cursor()
-					cur.execute("INSERT INTO article_data (url, content, user_id) VALUES (%s, %s, %s)", (url, content, session["id"]))
-					mysql.connection.commit()
-					article_id = cur.lastrowid
-
-					value = predict(content)
-
-					cur.execute("INSERT INTO classification_results (article_id, classification_result) VALUES (%s, %s)", (article_id, 1 if value else 0))
-					mysql.connection.commit()
-					cur.close()
-
-				else:
-					value = "Error!!"
-					explanation = ""
-			else:
-				value = "Invalid url!!"
-				explanation = ""
-	else:
+	if not session:
 		return redirect(url_for("login"))
 
-	return render_template("index.html", value=value, explanation=explanation, loading=loading)
+	if request.method == "POST":
+		url = request.form.get("url")  # Retrieve URL from form data
+		is_valid_url = url_validator(url)
+		if is_valid_url:
+			content = fetch_url_content(url)
+			if content:
+				user_id = session["id"]
+
+				cur = mysql.connection.cursor()
+				cur.execute(
+					"INSERT INTO article_data (url, content, user_id) VALUES (%s, %s, %s)",
+					(url, content, user_id)
+				)
+				mysql.connection.commit()
+				article_id = cur.lastrowid
+
+				value = predict(content)
+				classification_result = 1 if value else 0
+
+				cur.execute(
+					"INSERT INTO classification_results (article_id, classification_result) VALUES (%s, %s)",
+					(article_id, classification_result)
+				)
+				mysql.connection.commit()
+				cur.close()
+			else:
+				value = "Error!!"
+				explanation = ""
+		else:
+			value = "Invalid url!!"
+			explanation = ""
+
+	return render_template("index.html", value=value, explanation=explanation)
 
 
 @app.route("/signup", methods=["GET", "POST"])
 def signup():
-
 	error = ""
 
 	if request.method == "POST":
@@ -65,14 +81,14 @@ def signup():
 			hashed_password = sha256_hash(password)
 		
 			cur = mysql.connection.cursor()
-
 			cur.execute("SELECT * FROM users WHERE email = %s", (email,))
 			user = cur.fetchone()
 
-			if user:
-				error = "Email already taken"
-			else:
-				cur.execute("INSERT INTO users (name, email, password) VALUES (%s, %s, %s)", (name, email, hashed_password))
+			if not user:
+				cur.execute(
+					"INSERT INTO users (name, email, password) VALUES (%s, %s, %s)",
+					(name, email, hashed_password)
+				)
 				mysql.connection.commit()
 				cur.close()
 
@@ -82,13 +98,13 @@ def signup():
 				session["email"] = email
 
 				return redirect(url_for("index"))
-				
+
+			error = "Email already taken"				
 	return render_template("signup.html", error=error)
 
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
-
 	error = ""
 
 	if request.method == "POST":
@@ -97,9 +113,11 @@ def login():
 		hashed_password = sha256_hash(password)
 
 		cur = mysql.connection.cursor()
-		cur.execute("SELECT user_id, name, email FROM users WHERE email = %s AND password = %s", (email, hashed_password))
+		cur.execute(
+			"SELECT user_id, name, email FROM users WHERE email = %s AND password = %s",
+			(email, hashed_password)
+		)
 		user = cur.fetchone()
-
 		cur.close()
 		
 		if user:
@@ -109,8 +127,9 @@ def login():
 			session["email"] = email
 
 			return redirect(url_for("index"))
-		else:
-			error = "Invalid email or password"
+
+		error = "Invalid email or password"
+
 	return render_template("login.html", error=error)
 
 
